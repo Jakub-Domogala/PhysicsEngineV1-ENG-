@@ -56,6 +56,8 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
         this.repaint();
     }
 
+
+
     private void updatePositions(double dt) {
         for (VerletObject obj: objects) {
             obj.updatePosition(dt);
