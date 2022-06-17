@@ -3,16 +3,17 @@ package simulation;
 import other.Vec2D;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import javax.swing.JComponent;
 import java.util.ArrayList;
 
-public class Solver extends JComponent implements MouseListener, ComponentListener {
-    private int cicrleConstRadius = 380;
-    private int moveCircleRightDown = 20;
+public class Solver extends JComponent implements ComponentListener, MouseInputListener {
+    private int cicrleConstRadius = 360;
+    private int moveCircleRightDown = 40;
     private Vec2D gravity;
     private final ArrayList<VerletObject> objects;
 
@@ -40,18 +41,21 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
         }
         iteration++;
 
-
-//        if (iteration < 1400 && iteration > 20 && iteration % 100 > 20) {
-//            if (iteration % 2 == 0) {
-//                this.addObject(new Vec2D(380, 100), 6, 0, iteration, new Vec2D(-2, 0));
-//            }
-//            if (iteration % 2 == 0) {
-//                this.addObject(new Vec2D(420, 100), 6, 0, iteration+100, new Vec2D(2, 0));
-//            }
-//        }
-//        if(iteration % 80 == 0) {
-//            System.out.println(objects.size());
-//        }
+        double speed = 2;
+        if (iteration < 1200 && iteration > 20 && iteration % 100 > 20) {
+            if (iteration % 3 == 0) {
+                this.addObject(new Vec2D(380, 100), 8, 0, iteration, new Vec2D(-speed, 0));
+            }
+            if (iteration % 2 == 0) {
+                this.addObject(new Vec2D(420, 100), 6, 0, iteration+100, new Vec2D(speed, 0));
+            }
+        }
+        if (iteration == 1400) {
+            this.addObject(new Vec2D(400, 100), 60, 0, iteration, new Vec2D(0, 5));
+        }
+        if(iteration % 80 == 0) {
+            System.out.println(objects.size());
+        }
 
         this.repaint();
     }
@@ -137,48 +141,47 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
         drawObjects(g);
     }
 
-    @Override
     public void componentResized(ComponentEvent e) {
 
     }
 
-    @Override
     public void componentMoved(ComponentEvent e) {
 
     }
 
-    @Override
     public void componentShown(ComponentEvent e) {
 
     }
 
-    @Override
     public void componentHidden(ComponentEvent e) {
 
     }
 
-    @Override
     public void mouseClicked(MouseEvent e) {
-
+        System.out.println("clicked");
     }
 
-    @Override
     public void mousePressed(MouseEvent e) {
 
     }
 
-    @Override
     public void mouseReleased(MouseEvent e) {
 
     }
 
-    @Override
     public void mouseEntered(MouseEvent e) {
 
     }
 
-    @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    public void mouseMoved(MouseEvent e) {
 
     }
 }

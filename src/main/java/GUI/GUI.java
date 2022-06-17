@@ -14,11 +14,13 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
     public Solver solver;
     private int iterNum = 0;
     private boolean run = true;
-    private int initDelay = 5;
-    private int substeps = 4;
+    private int initDelay;
+    private int substeps;
     private JFrame frame;
 
-    public GUI(JFrame jf, Solver solver) {
+    public GUI(JFrame jf, Solver solver, int substeps, int fps) {
+        this.substeps = substeps;
+        this.initDelay = 1000 / fps;
         this.frame = jf;
         this.solver = solver;
         timer = new Timer(initDelay, this);
@@ -38,7 +40,8 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
             iterNum++;
             frame.setTitle(Integer.toString(iterNum));
             solver.update((double) 0.001 * initDelay, substeps);
-//            System.out.println("a");
+        } else {
+
         }
     }
 
