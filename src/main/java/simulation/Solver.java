@@ -11,7 +11,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Solver extends JComponent implements MouseListener, ComponentListener {
-    private int cicrleConstRadius = 400;
+    private int cicrleConstRadius = 380;
+    private int moveCircleRightDown = 20;
     private Vec2D gravity;
     private final ArrayList<VerletObject> objects;
 
@@ -37,22 +38,20 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
             updatePositions(dt / substeps);
             applyConstraintCircular();
         }
-
-
         iteration++;
-        if (iteration < 1400 && iteration > 20 && iteration % 100 > 20) {
-            if (iteration % 2 == 0) {
-                this.addObject(new Vec2D(380, 100), 6, 0, iteration, new Vec2D(-2, 0));
-//                this.addObject(new Vec2D(420, 100), 25, 0, 50, new Vec2D(2, 0));
-            }
-            if (iteration % 2 == 0) {
-//                this.addObject(new Vec2D(380, 100), 25, 0, 0, new Vec2D(-2, 0));
-                this.addObject(new Vec2D(420, 100), 6, 0, iteration+100, new Vec2D(2, 0));
-            }
-        }
-        if(iteration % 80 == 0) {
-            System.out.println(objects.size());
-        }
+
+
+//        if (iteration < 1400 && iteration > 20 && iteration % 100 > 20) {
+//            if (iteration % 2 == 0) {
+//                this.addObject(new Vec2D(380, 100), 6, 0, iteration, new Vec2D(-2, 0));
+//            }
+//            if (iteration % 2 == 0) {
+//                this.addObject(new Vec2D(420, 100), 6, 0, iteration+100, new Vec2D(2, 0));
+//            }
+//        }
+//        if(iteration % 80 == 0) {
+//            System.out.println(objects.size());
+//        }
 
         this.repaint();
     }
@@ -70,7 +69,7 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
     }
 
     private void applyConstraintCircular() {
-        Vec2D circlePosition = new Vec2D(cicrleConstRadius, cicrleConstRadius);
+        Vec2D circlePosition = new Vec2D(cicrleConstRadius + moveCircleRightDown, cicrleConstRadius + moveCircleRightDown);
         int radius = cicrleConstRadius;
         for (VerletObject obj: objects) {
             Vec2D to_obj = obj.getPosition().subtract(circlePosition);
@@ -91,8 +90,10 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
                     if (dist < obj1.getRadius() + obj2.getRadius()) {
                         Vec2D normal = collisionAxis.divide(dist);
                         double delta = obj1.getRadius() + obj2.getRadius() - dist;
-                        obj1.setCurrentPsition(obj1.getPosition().add(normal.multiply(0.5 * delta)));
-                        obj2.setCurrentPsition(obj2.getPosition().subtract(normal.multiply(0.5 * delta)));
+                        double weight1 = Math.pow(obj1.getRadius(), 2) / (Math.pow(obj1.getRadius(), 2) + Math.pow(obj2.getRadius(), 2));
+                        double weight2 = (double) 1 - weight1;
+                        obj1.setCurrentPsition(obj1.getPosition().add(normal.multiply(weight2 * delta)));
+                        obj2.setCurrentPsition(obj2.getPosition().subtract(normal.multiply(weight1 * delta)));
                     }
                 }
             }
@@ -116,7 +117,7 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
         g.fillRect(0, 0, 1000, 1000);
         g.setColor(new Color(50, 50, 50, 255));
         int corn = 0;
-        g.fillOval(0+corn, 0+corn, cicrleConstRadius*2-corn, cicrleConstRadius*2-corn);
+        g.fillOval(moveCircleRightDown+corn, moveCircleRightDown+corn, cicrleConstRadius*2-corn, cicrleConstRadius*2-corn);
         for(VerletObject obj: objects) {
             Vec2D position = obj.getPosition();
 //            System.out.println(position.toString());
@@ -131,9 +132,6 @@ public class Solver extends JComponent implements MouseListener, ComponentListen
     }
 
     protected void paintComponent(Graphics g) {
-//        g.setColor(new Color(100, 10, 10, 255));
-//        g.fillRect(10, 10, 100, 100);
-//        System.out.println("aaaa");
         drawObjects(g);
     }
 

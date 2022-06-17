@@ -10,11 +10,12 @@ public class App extends JFrame {
 
     public App() {
         Solver solver = new Solver();
-//        solver.addObject(new Vec2D(450, 300), 10);
+        solver.addObject(new Vec2D(150, 300), 10);
+        solver.addObject(new Vec2D(600, 300), 20);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gof = new GUI(this, solver);
         gof.initialize(this.getContentPane());
-        this.setSize(800,800);
+        this.setSize(820,840);
         this.setVisible(true);
         this.setBackground(Color.BLACK);
     }
